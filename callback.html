@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shiftly — conectando...</title>
+  <style>
+    body { font-family: sans-serif; display: flex; align-items: center; justify-content: center;
+           min-height: 100vh; margin: 0; background: #1a1a2e; color: #fff; flex-direction: column; gap: 16px; }
+    p { opacity: 0.6; font-size: 14px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div>☁️ Conectando Shiftly con Google Drive...</div>
+  <p>Podés cerrar esta pestaña si la app no se abre automáticamente.</p>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code  = params.get('code');
+    const state = params.get('state');
+    const error = params.get('error');
+
+    if (error) {
+      document.querySelector('div').textContent = '❌ ' + (params.get('error_description') || error);
+    } else if (code) {
+      // Redirigir al scheme de la app — Android lo intercepta via intent-filter
+      const appUrl = 'com.ezequiel.shiftly://oauth2?code=' + encodeURIComponent(code)
+                   + '&state=' + encodeURIComponent(state || '');
+      window.location.href = appUrl;
+    } else {
+      document.querySelector('div').textContent = '⚠️ Sin código de autorización.';
+    }
+  </script>
+</body>
+</html>
